@@ -26,14 +26,15 @@ import java.io.FileOutputStream
 import java.net.URI
 
 class MainActivity : AppCompatActivity() {
+    var selectedImgId = R.drawable.img1
     @SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
-        var selectedImgId = R.drawable.img1
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         val button = findViewById<Button>(R.id.changeWallpaperButton)
         val drawableResourcesIds = mutableListOf<Int>()
+        val drawableResourcesName = mutableListOf<String>()
         val packageName = resources.getResourcePackageName(R.drawable.img1)
         val resourcesField = R.drawable::class.java.fields
 
@@ -42,13 +43,16 @@ class MainActivity : AppCompatActivity() {
                 val resourceId = resources.getIdentifier(field.name, "drawable", packageName)
                 if (resourceId != 0) {
                     drawableResourcesIds.add(resourceId)
+                    drawableResourcesName.add(field.name)
                 }
             }
         }
         val ll = findViewById<LinearLayout>(R.id.imageContainer)
+        var i =0
         for (resourceId in drawableResourcesIds) {
             val imageView = ImageView(ll.context)
             imageView.setImageResource(resourceId)
+            imageView.tag = drawableResourcesName[i++]
             imageView.maxHeight = ViewGroup.LayoutParams.WRAP_CONTENT
             imageView.maxWidth = ViewGroup.LayoutParams.MATCH_PARENT
             imageView.setOnClickListener {
